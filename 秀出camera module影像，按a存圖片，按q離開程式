@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import cv2
+import os
+
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print("無法開啟攝影機")
+    exit()
+
+save_path = os.path.expanduser("~/Desktop")
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("無法接收影格 (影片結束)。正在退出...")
+        break
+
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    cv2.imshow('live', frame)
+    # cv2.imshow('live', gray)
+
+    key = cv2.waitKey(1)
+    if key == ord('q'):
+        break
+    elif key == ord('a'):
+        img_name = "frame.jpg"
+        img_path = os.path.join(save_path, img_name)
+        cv2.imwrite(img_path, frame)
+        print(f"已儲存影像於 {img_path}")
+
+cap.release()
+cv2.destroyAllWindows()
